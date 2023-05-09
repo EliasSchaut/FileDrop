@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FileDrop</title>
+</head>
+<body>
+<script>
+    const pwd = prompt("Enter password");
+    fetch("/api/get_file", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            password: pwd
+        })
+    }).then((res) => {
+        if (res.status !== 200) {
+            alert("Wrong password")
+            window.location.href = "/"
+        } else {
+            res.blob().then((blob) => {
+                const a = document.createElement("a");
+                a.href = URL.createObjectURL(blob);
+                a.download = "secret.zip";
+                a.click()
+                a.remove()
+            })
+        }
+    })
+</script>
+</body>
+</html>
